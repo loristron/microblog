@@ -1,5 +1,5 @@
 
-from flask import Blueprint, jsonify, make_response, request
+from flask import Blueprint, jsonify, make_response, request, session
 from flasgger import swag_from
 from flask_httpauth import HTTPTokenAuth
 from conf.passwords import CREDS
@@ -11,7 +11,6 @@ import json
 token_auth = HTTPTokenAuth(scheme='Bearer')
 database = dbConnector()
 auth = Blueprint('auth', __name__, url_prefix='/api/auth')
-
 
 @token_auth.verify_token
 def verify_token(token):
@@ -61,3 +60,29 @@ def register_user():
             return make_response(jsonify({'error': 'Algo deu errado!'}), 400)
     except Exception as e:
         return make_response(jsonify({'error': str(e), 'ok': False}, 500))
+    
+
+@auth.route('/login',  methods=['POST'])
+@token_auth.login_required
+@swag_from('docs/login.yaml')     
+def login():
+    try:
+        email_or_username = request.form['email_or_username'].strip().lower()
+        password = request.form.get('password')
+
+        sql = f"SELECT * FROM users WHERE username = '{email_or_username}' OR email = '{email_or_username}'"
+        user_info = json.loads(database.make_select(sql=sql))
+
+        if not user_info.get('ok') or len(user_info.get('data')) == 0:
+            return make_response(jsonify({'data': 'Usuário não encontrado'}), 200)
+        
+        if not check_password_hash(pwhash=user_info.get('data')[0].get('hash_password'), password=password):
+            return make_response(jsonify({'error': 'Senha incorreta'}), 403)
+        
+        return make_response(jsonify(user_info.get('data')), 200)
+    except Exception as e:
+        return make_response(jsonify({'error': str(e), 'ok': False}, 500))
+    
+
+
+    

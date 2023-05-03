@@ -1,0 +1,27 @@
+Autentica um usuário
+---
+tags:
+  - Auth
+
+parameters:
+  - name: email_or_username
+    in: formData
+    type: integer
+    required: true
+    description: Email ou username
+
+  - name: password
+    in: formData
+    type: string
+    required: true
+    description: Senha
+  
+responses:
+  200:
+    description: Usuário encontrado
+  400:
+    description: Bad request - erro ao se comunicar com o servidor 
+  403:
+    description: Senha incorreta 
+  500:
+    description: Erro interno do servidor
