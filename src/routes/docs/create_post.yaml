@@ -1,0 +1,31 @@
+Cria um novo usuário
+---
+tags:
+  - Posts
+produces:
+  - application/json
+
+parameters:
+  - name: user_id
+    in: formData
+    type: integer
+    required: true
+    description: ID do usuário autor do post
+
+  - name: content
+    in: formData
+    type: string
+    required: true
+    description: Conteúdo do post
+  
+responses:
+  201:
+    description: Post criado com sucesso
+  200:
+    description: Post não foi criado, mas a solicitaçaõ funcionou
+  400:
+    description: Bad request - erro ao se comunicar com o servidor
+  404:
+    description: Usuário não encontrado
+  500:
+    description: Erro interno do servidor

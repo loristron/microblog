@@ -58,3 +58,23 @@ class dbConnector():
             return json.dumps({'erorr': str(e), 'ok': False}, default=str)
         finally:
             cur.close()
+
+    def insert_post(self, user_id: int, content: str):
+        try:
+            sql =f"""
+                INSERT INTO `posts` 
+                (`user_id`, `post_content`) 
+                VALUES 
+                ('{user_id}', '{content}');
+            """ 
+            cur = self.cnx.cursor()
+            cur.execute(sql)
+            self.cnx.commit()
+            return json.dumps({'data': {
+                'user_id': user_id,
+                'content': content
+            }, 'ok': True}, default=str)
+        except Exception as e:
+            return json.dumps({'erorr': str(e), 'ok': False}, default=str)
+        finally:
+            cur.close()
