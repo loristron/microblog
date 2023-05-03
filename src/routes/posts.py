@@ -55,7 +55,6 @@ def delete_post():
         user_id = request.form['user_id']
         post_id = request.form['post_id']
         delete = json.loads(database.delete_post(user_id=user_id, post_id=post_id))
-        print(delete)
         return make_response(jsonify({'data': delete}))
     except Exception as e:
         return make_response(jsonify({'error': str(e)}), 500)
