@@ -1,0 +1,16 @@
+Lista todos os posts 
+--- 
+tags:
+  - Posts
+produces:
+  - application/json
+
+responses:
+  200:
+    description: Informações recebidas corretamente
+  401:
+    description: Acesso não autorizado. Verifique suas credenciais
+  404:
+    description: Nenhum resultado encontrado
+  500:
+    description: Erro de servidor, tente novamente. Se o erro persistir, contacte o suporte
