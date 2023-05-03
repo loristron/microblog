@@ -1,10 +1,8 @@
-from flask import Blueprint, jsonify, make_response, request
+from flask import Blueprint, jsonify, make_response
 from flasgger import swag_from
 from flask_httpauth import HTTPTokenAuth
 from conf.passwords import CREDS
 from services.users_service import dbConnector
-from werkzeug.security import generate_password_hash, check_password_hash
-from tools.tools import is_valid_email, is_valid_date, convert_string_to_datetime
 import json
 
 token_auth = HTTPTokenAuth(scheme='Bearer')
