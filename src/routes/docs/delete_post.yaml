@@ -1,4 +1,4 @@
-Cria um novo post
+Deleta um post
 ---
 tags:
   - Posts
@@ -12,20 +12,16 @@ parameters:
     required: true
     description: ID do usuário autor do post
 
-  - name: content
+  - name: post_id
     in: formData
-    type: string
+    type: integer
     required: true
-    description: Conteúdo do post
+    description: ID do post
   
 responses:
-  201:
-    description: Post criado com sucesso
   200:
-    description: Post não foi criado, mas a solicitaçaõ funcionou
+    description: Post deletado
   400:
     description: Bad request - erro ao se comunicar com o servidor
-  404:
-    description: Usuário não encontrado
   500:
     description: Erro interno do servidor
