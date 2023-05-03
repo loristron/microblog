@@ -45,4 +45,3 @@ source secrets_reveal.sh
 ```
 python3 main.py
 ```
-
