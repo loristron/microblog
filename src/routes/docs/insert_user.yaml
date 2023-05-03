@@ -1,0 +1,60 @@
+Cria um novo usuário
+---
+tags:
+  - Users
+basePath: /api
+schemes:
+  - http
+  - https
+# consumes:
+#   - application/json
+# produces:
+#   - application/json
+parameters:
+  - name: name
+    in: formData
+    type: integer
+    required: true
+    description: Nome Completo
+
+  - name: username
+    in: formData
+    type: string
+    required: true
+    description: Nome de Usuário
+
+  - name: email
+    in: formData
+    type: string
+    required: true
+    description: Email
+
+  - name: phone
+    in: formData
+    type: string
+    required: true
+    description: Número de telfone (apenas números)
+
+  - name: date_of_birth
+    in: formData
+    type: string
+    required: true
+    description: Data de nascimento no formato DD/MM/AAAA
+
+  - name: password
+    in: formData
+    type: string
+    required: true
+    description: Senha
+  
+responses:
+  201:
+    description: Usuário criado com sucesso
+  200:
+    description: Usuário não criado, mas a solicitaçaõ funcionou
+  400:
+    description: Bad request - erro ao se comunicar com o servidor 
+  500:
+    description: Erro interno do servidor
+summary: Cria um novo usuário
+description: Este endpoint cria um novo usuário com base nos parâmetros fornecidos.
