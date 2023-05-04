@@ -21,7 +21,10 @@ posts = Blueprint('posts', __name__, url_prefix='/api/posts')
 @swag_from('docs/get_all_posts.yaml') 
 def get_posts():
     try:
-        data = json.loads(database.make_select("""SELECT * FROM posts;"""))
+        data = json.loads(database.make_select("""
+        SELECT name, username, user_id, post_id, post_content, p.created_at, p.updated_at
+        FROM posts p 
+        LEFT JOIN users u USING (user_id);""")) 
         return make_response(jsonify(data), 200)
     except Exception as e:
         return make_response(jsonify({'error': str(e)}), 500)
