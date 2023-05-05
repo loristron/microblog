@@ -24,10 +24,20 @@ def register_user():
     try:
         name = request.form['name'].strip().replace("'", '`').title()
         username = request.form['username'].lower().strip()
+
+        # verificação de username alfanimérico
+        if not username.isalnum():
+            return make_response(jsonify({'error': 'Caracteres alfanuméricos, por favor.'}), 400)
+        
+        # tamanho de username
+        if len(username) > 20:
+            return make_response(jsonify({'error': 'máximo 20 caracteres'}))
+
         email = request.form['email'].strip()
         phone = request.form['phone'].strip().replace('+55', '').replace(')', '').replace("(", '')
         date_of_birth = request.form['date_of_birth'].strip()
         password = request.form['password'].strip()
+        avatar = "https://robohash.org/loris.png"
 
         ## Verificação de email 
         if not is_valid_email(email=email):
@@ -52,11 +62,13 @@ def register_user():
             email=email, 
             phone=phone,
             date_of_birth=date_of_birth,
-            hash_password=hashed_password
+            hash_password=hashed_password,
+            avatar=avatar
             ))
         if data.get('ok'):
             return make_response(jsonify(data), 201)
         else:
+            print(data)
             return make_response(jsonify({'error': 'Algo deu errado!'}), 400)
     except Exception as e:
         return make_response(jsonify({'error': str(e), 'ok': False}, 500))
@@ -72,9 +84,8 @@ def login():
 
         sql = f"SELECT * FROM users WHERE username = '{email_or_username}' OR email = '{email_or_username}'"
         user_info = json.loads(database.make_select(sql=sql))
-
         if not user_info.get('ok') or len(user_info.get('data')) == 0:
-            return make_response(jsonify({'data': 'Usuário não encontrado'}), 200)
+            return make_response(jsonify({'data': 'Usuário não encontrado'}), 404)
         
         if not check_password_hash(pwhash=user_info.get('data')[0].get('hash_password'), password=password):
             return make_response(jsonify({'error': 'Senha incorreta'}), 403)

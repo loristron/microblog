@@ -37,11 +37,11 @@ class dbConnector():
         finally:
             cur.close()
         
-    def insert_user(self, name: str, username: str, email: str, phone: str, hash_password: str, date_of_birth: datetime):
+    def insert_user(self, name: str, username: str, email: str, phone: str, hash_password: str, date_of_birth: datetime, avatar: str):
         try:
             sql =f"""
-                INSERT INTO `users` (`name`, `username`, `email`, `phone`, `hash_password`, `date_of_birth`) 
-                VALUES ('{name}', '{username}', '{email}', '{phone}', '{hash_password}', '{date_of_birth}');
+                INSERT INTO `users` (`name`, `username`, `email`, `phone`, `hash_password`, `date_of_birth`, `avatar`) 
+                VALUES ('{name}', '{username}', '{email}', '{phone}', '{hash_password}', '{date_of_birth}', '{avatar}');
             """ 
             cur = self.cnx.cursor()
             cur.execute(sql)
@@ -52,10 +52,11 @@ class dbConnector():
                 'email': email,
                 'phone': phone, 
                 'password': hash_password, 
-                'date_of_birth': date_of_birth
+                'date_of_birth': date_of_birth,
+                'avatar': avatar,
             }, 'ok': True}, default=str)
         except Exception as e:
-            return json.dumps({'erorr': str(e), 'ok': False}, default=str)
+            return json.dumps({'erorr in insert_user': str(e), 'ok': False}, default=str)
         finally:
             cur.close()
 
@@ -63,7 +64,7 @@ class dbConnector():
         try:
             sql =f"""
                 INSERT INTO `posts` 
-                (`user_id`, `post_content`) 
+                (`user_id`, `content`) 
                 VALUES 
                 ('{user_id}', '{content}');
             """ 

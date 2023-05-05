@@ -22,7 +22,7 @@ posts = Blueprint('posts', __name__, url_prefix='/api/posts')
 def get_posts():
     try:
         data = json.loads(database.make_select("""
-        SELECT name, username, user_id, post_id, post_content, p.created_at, p.updated_at
+        SELECT name, username, user_id, post_id, content, p.created_at, p.updated_at, u.avatar
         FROM posts p 
         LEFT JOIN users u USING (user_id);""")) 
         return make_response(jsonify(data), 200)
@@ -47,6 +47,8 @@ def create_post():
         insert_post = json.loads(database.insert_post(user_id=user_id, content=content))
         if insert_post.get('ok'):
             return make_response(jsonify({'data': insert_post}), 201)
+        else:
+            return make_response(jsonify({'error em /create': insert_post}), 200)
     except Exception as e:
         return make_response(jsonify({'error': str(e)}), 500)
     
