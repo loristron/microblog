@@ -24,7 +24,7 @@ def get_posts():
         data = json.loads(database.make_select("""
         SELECT name, username, user_id, post_id, content, p.created_at, p.updated_at, u.avatar
         FROM posts p 
-        LEFT JOIN users u USING (user_id);""")) 
+        LEFT JOIN users u USING (user_id) ORDER BY p.created_at desc;""")) 
         return make_response(jsonify(data), 200)
     except Exception as e:
         return make_response(jsonify({'error': str(e)}), 500)
